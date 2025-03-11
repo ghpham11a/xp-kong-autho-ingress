@@ -1,0 +1,27 @@
+# oidc-plugin.yaml
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: auth0-oidc-plugin
+  namespace: kong
+plugin: openid-connect
+config:
+  name: "Auth0"
+  issuer: "https://<YOUR-TENANT>.auth0.com/"
+  client_id: "<YOUR_CLIENT_ID>"
+  client_secret: "<YOUR_CLIENT_SECRET>"
+
+  # If you only want to validate incoming bearer tokens (and not do a browser redirect flow), enable:
+  # bearer_only: true
+  # auth_methods: ["bearer"]
+
+  # If you want the full OIDC redirection flow:
+  # Ensure you have an app in Auth0 with a callback/redirect URI that points back to Kong.
+  # e.g., redirect_uri: "http://<YOUR-KONG-HOST>/callback"
+  # Then disable bearer_only:
+  # bearer_only: false
+
+  # Additional config is possible:
+  # session_secret: "super-secret-key"  # For storing session data in the gateway
+  # scopes: "openid profile email"
+  # Note: see official docs for full plugin configuration.

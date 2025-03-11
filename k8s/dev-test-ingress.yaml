@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo-ingress
+  namespace: kong
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: auth0-oidc-plugin
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /secure
+            pathType: Prefix
+            backend:
+              service:
+                name: echo-service
+                port:
+                  number: 80
