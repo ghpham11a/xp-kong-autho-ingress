@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 
 import Highlight from "../components/Highlight";
@@ -6,7 +6,22 @@ import Loading from "../components/Loading";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
 export const ProfileComponent = () => {
-  const { user } = useAuth0();
+
+  const { user, getAccessTokenSilently } = useAuth0();
+  const [accessToken, setAccessToken] = useState("");
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        setAccessToken(token);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetchAccessToken();
+  }, [getAccessTokenSilently]);
 
   return (
     <Container className="mb-5">
@@ -25,6 +40,12 @@ export const ProfileComponent = () => {
       </Row>
       <Row>
         <Highlight>{JSON.stringify(user, null, 2)}</Highlight>
+      </Row>
+      <Row>
+        <Col>
+          <h4>Access Token</h4>
+          <Highlight>{accessToken}</Highlight>
+        </Col>
       </Row>
     </Container>
   );
